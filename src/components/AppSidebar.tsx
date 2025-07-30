@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Calendar, Users, User, LogOut, Menu, ChefHat } from "lucide-react";
+import { Home, Calendar, Users, User, LogOut, Menu, ChefHat, Calculator } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 import {
@@ -20,6 +20,7 @@ const navigationItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home },
   { title: "Eventos", url: "/events", icon: Calendar },
   { title: "Recetas", url: "/recipes", icon: ChefHat },
+  { title: "Calculadora", url: "/calculator", icon: Calculator },
   { title: "Miembros", url: "/members", icon: Users },
   { title: "Mi Perfil", url: "/complete-profile", icon: User },
 ];

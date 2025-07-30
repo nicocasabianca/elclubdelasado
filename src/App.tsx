@@ -11,6 +11,7 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Events from "./pages/Events";
 import { Recipes } from "./pages/Recipes";
+import Calculator from "./pages/Calculator";
 import CompleteProfile from "./pages/CompleteProfile";
 import NotFound from "./pages/NotFound";
 
@@ -59,6 +60,16 @@ const App = () => (
                 <ProtectedRoute>
                   <DashboardLayout>
                     <Recipes />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/calculator" 
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Calculator />
                   </DashboardLayout>
                 </ProtectedRoute>
               } 
