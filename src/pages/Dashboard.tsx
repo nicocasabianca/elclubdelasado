@@ -96,6 +96,7 @@ const Dashboard = () => {
                 <p><strong>Nombre:</strong> {profile.first_name} {profile.last_name}</p>
                 <p><strong>Email:</strong> {user?.email}</p>
                 <p><strong>Categoría:</strong> {profile.membership_category}</p>
+                <p><strong>Fecha de nacimiento:</strong> {new Date(profile.birth_date).toLocaleDateString('es-ES')}</p>
               </div>
               <Button className="w-full mt-4" variant="outline" onClick={() => navigate("/complete-profile")}>
                 Editar Perfil

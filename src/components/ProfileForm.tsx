@@ -1,12 +1,17 @@
 import { useState, useRef } from "react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Camera, Upload } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Camera, Upload, CalendarIcon } from "lucide-react";
 import { useProfile, MembershipCategory } from "@/hooks/useProfile";
+import { cn } from "@/lib/utils";
 
 interface ProfileFormProps {
   onComplete?: () => void;
@@ -30,9 +35,13 @@ const ProfileForm = ({ onComplete }: ProfileFormProps) => {
     first_name: profile?.first_name || "",
     last_name: profile?.last_name || "",
     membership_category: profile?.membership_category || ("" as MembershipCategory),
-    birth_year: profile?.birth_year || new Date().getFullYear() - 25,
+    birth_date: profile?.birth_date || new Date(new Date().getFullYear() - 25, 0, 1).toISOString().split('T')[0],
     profile_picture_url: profile?.profile_picture_url || "",
   });
+
+  const [birthDate, setBirthDate] = useState<Date | undefined>(
+    profile?.birth_date ? new Date(profile.birth_date) : undefined
+  );
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -94,9 +103,6 @@ const ProfileForm = ({ onComplete }: ProfileFormProps) => {
     setLoading(false);
   };
 
-  const currentYear = new Date().getFullYear();
-  const minYear = currentYear - 80;
-  const maxYear = currentYear - 18;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
@@ -170,18 +176,51 @@ const ProfileForm = ({ onComplete }: ProfileFormProps) => {
               </div>
             </div>
 
-            {/* Año de nacimiento */}
+            {/* Fecha de nacimiento */}
             <div className="space-y-2">
-              <Label htmlFor="birth_year">Año de Nacimiento *</Label>
-              <Input
-                id="birth_year"
-                type="number"
-                min={minYear}
-                max={maxYear}
-                value={formData.birth_year}
-                onChange={(e) => setFormData(prev => ({ ...prev, birth_year: parseInt(e.target.value) }))}
-                required
-              />
+              <Label>Fecha de Nacimiento *</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !birthDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {birthDate ? (
+                      format(birthDate, "PPP", { locale: es })
+                    ) : (
+                      <span>Selecciona tu fecha de nacimiento</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={birthDate}
+                    onSelect={(date) => {
+                      setBirthDate(date);
+                      if (date) {
+                        setFormData(prev => ({ 
+                          ...prev, 
+                          birth_date: date.toISOString().split('T')[0] 
+                        }));
+                      }
+                    }}
+                    disabled={(date) =>
+                      date > new Date(new Date().getFullYear() - 18, 11, 31) || 
+                      date < new Date(new Date().getFullYear() - 80, 0, 1)
+                    }
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                    captionLayout="dropdown-buttons"
+                    fromYear={new Date().getFullYear() - 80}
+                    toYear={new Date().getFullYear() - 18}
+                  />
+                </PopoverContent>
+              </Popover>
               <p className="text-sm text-muted-foreground">
                 Debes tener entre 18 y 80 años para unirte al club
               </p>

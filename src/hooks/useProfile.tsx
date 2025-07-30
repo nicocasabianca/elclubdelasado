@@ -12,7 +12,7 @@ export interface Profile {
   last_name: string;
   membership_category: MembershipCategory;
   profile_picture_url: string;
-  birth_year: number;
+  birth_date: string;
   created_at: string;
   updated_at: string;
 }
