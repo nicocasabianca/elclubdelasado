@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Events from "./pages/Events";
+import { Recipes } from "./pages/Recipes";
 import CompleteProfile from "./pages/CompleteProfile";
 import NotFound from "./pages/NotFound";
 
@@ -48,6 +49,16 @@ const App = () => (
                 <ProtectedRoute>
                   <DashboardLayout>
                     <Events />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/recipes" 
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Recipes />
                   </DashboardLayout>
                 </ProtectedRoute>
               } 

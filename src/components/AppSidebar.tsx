@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Calendar, Users, User, LogOut, Menu } from "lucide-react";
+import { Home, Calendar, Users, User, LogOut, Menu, ChefHat } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 import {
@@ -19,6 +19,7 @@ import {
 const navigationItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home },
   { title: "Eventos", url: "/events", icon: Calendar },
+  { title: "Recetas", url: "/recipes", icon: ChefHat },
   { title: "Miembros", url: "/members", icon: Users },
   { title: "Mi Perfil", url: "/complete-profile", icon: User },
 ];

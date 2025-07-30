@@ -79,6 +79,33 @@ export type Database = {
         }
         Relationships: []
       }
+      meat_cuts: {
+        Row: {
+          category: Database["public"]["Enums"]["recipe_category"]
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["recipe_category"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["recipe_category"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           birth_date: string
@@ -115,6 +142,128 @@ export type Database = {
         }
         Relationships: []
       }
+      recipe_favorites: {
+        Row: {
+          created_at: string
+          id: string
+          recipe_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          recipe_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          recipe_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_favorites_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recipe_meat_cuts: {
+        Row: {
+          created_at: string
+          id: string
+          meat_cut_id: string
+          recipe_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          meat_cut_id: string
+          recipe_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          meat_cut_id?: string
+          recipe_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_meat_cuts_meat_cut_id_fkey"
+            columns: ["meat_cut_id"]
+            isOneToOne: false
+            referencedRelation: "meat_cuts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_meat_cuts_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recipes: {
+        Row: {
+          category: Database["public"]["Enums"]["recipe_category"]
+          cook_time_minutes: number | null
+          created_at: string
+          created_by: string
+          description: string | null
+          difficulty_level: number | null
+          id: string
+          image_url: string | null
+          ingredients: string[]
+          instructions: string
+          pdf_url: string | null
+          prep_time_minutes: number | null
+          servings: number | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["recipe_category"]
+          cook_time_minutes?: number | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          difficulty_level?: number | null
+          id?: string
+          image_url?: string | null
+          ingredients?: string[]
+          instructions: string
+          pdf_url?: string | null
+          prep_time_minutes?: number | null
+          servings?: number | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["recipe_category"]
+          cook_time_minutes?: number | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          difficulty_level?: number | null
+          id?: string
+          image_url?: string | null
+          ingredients?: string[]
+          instructions?: string
+          pdf_url?: string | null
+          prep_time_minutes?: number | null
+          servings?: number | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -124,6 +273,14 @@ export type Database = {
     }
     Enums: {
       membership_category: "Fuego" | "Brasas" | "Carbón" | "Digital"
+      recipe_category:
+        | "vacuna"
+        | "cerdo"
+        | "ave"
+        | "pez"
+        | "vegetales"
+        | "salsas"
+        | "acompañamientos"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -252,6 +409,15 @@ export const Constants = {
   public: {
     Enums: {
       membership_category: ["Fuego", "Brasas", "Carbón", "Digital"],
+      recipe_category: [
+        "vacuna",
+        "cerdo",
+        "ave",
+        "pez",
+        "vegetales",
+        "salsas",
+        "acompañamientos",
+      ],
     },
   },
 } as const
