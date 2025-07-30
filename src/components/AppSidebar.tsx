@@ -17,12 +17,12 @@ import {
 } from "@/components/ui/sidebar";
 
 const navigationItems = [
-  { title: "Dashboard", url: "/dashboard", icon: Home },
-  { title: "Eventos", url: "/events", icon: Calendar },
-  { title: "Recetas", url: "/recipes", icon: ChefHat },
   { title: "Calculadora", url: "/calculator", icon: Calculator },
-  { title: "Miembros", url: "/members", icon: Users },
-  { title: "Mi Perfil", url: "/complete-profile", icon: User },
+  // { title: "Dashboard", url: "/dashboard", icon: Home },
+  // { title: "Eventos", url: "/events", icon: Calendar },
+  // { title: "Recetas", url: "/recipes", icon: ChefHat },
+  // { title: "Miembros", url: "/members", icon: Users },
+  // { title: "Mi Perfil", url: "/complete-profile", icon: User },
 ];
 
 export function AppSidebar() {
@@ -42,7 +42,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "hidden" : "block"}>
-            El Club del Asado
+            Calculadora de Asados
           </SidebarGroupLabel>
 
           <SidebarGroupContent>

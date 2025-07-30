@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      access_codes: {
+        Row: {
+          code: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          member_name: string
+          membership_status: string
+          updated_at: string
+          used_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          member_name: string
+          membership_status?: string
+          updated_at?: string
+          used_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          member_name?: string
+          membership_status?: string
+          updated_at?: string
+          used_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       event_registrations: {
         Row: {
           event_id: string
@@ -326,7 +362,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      mark_code_as_used: {
+        Args: { code_id: string; user_id: string }
+        Returns: boolean
+      }
+      verify_access_code: {
+        Args: { access_code: string }
+        Returns: Json
+      }
     }
     Enums: {
       membership_category: "Fuego" | "Brasas" | "Carbón" | "Digital"

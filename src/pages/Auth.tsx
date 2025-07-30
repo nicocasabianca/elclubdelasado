@@ -4,27 +4,56 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const Auth = () => {
-  const { user, signIn, signUp } = useAuth();
+  const { user, signUp } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [accessCode, setAccessCode] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [memberName, setMemberName] = useState("");
+  const [codeId, setCodeId] = useState("");
+  const [step, setStep] = useState<'code' | 'register'>('code');
 
   // Si ya está autenticado, redirigir al dashboard
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/calculator" replace />;
   }
 
-  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCodeVerification = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    try {
+      const { data, error } = await supabase.rpc('verify_access_code', {
+        access_code: accessCode
+      });
 
-    await signIn(email, password);
+      if (error) {
+        toast.error("Error al verificar el código");
+        setLoading(false);
+        return;
+      }
+
+      const result = data as { valid: boolean; error?: string; member_name?: string; code_id?: string };
+
+      if (!result.valid) {
+        toast.error(result.error || "Código inválido");
+        setLoading(false);
+        return;
+      }
+
+      setMemberName(result.member_name || "");
+      setCodeId(result.code_id || "");
+      setStep('register');
+      toast.success(`¡Bienvenido ${result.member_name}! Ahora crea tu cuenta.`);
+    } catch (error) {
+      toast.error("Error al verificar el código");
+    }
+    
     setLoading(false);
   };
 
@@ -32,11 +61,29 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    try {
+      const { data: authData, error: authError } = await signUp(email, password);
+      
+      if (authError || !authData.user) {
+        setLoading(false);
+        return;
+      }
 
-    await signUp(email, password);
+      // Marcar el código como utilizado
+      const { error: markError } = await supabase.rpc('mark_code_as_used', {
+        code_id: codeId,
+        user_id: authData.user.id
+      });
+
+      if (markError) {
+        console.error("Error marking code as used:", markError);
+      }
+
+      toast.success("¡Cuenta creada exitosamente! Redirigiendo...");
+    } catch (error) {
+      toast.error("Error al crear la cuenta");
+    }
+    
     setLoading(false);
   };
 
@@ -44,75 +91,73 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">El Club del Asado</CardTitle>
+          <CardTitle className="text-2xl font-bold">Calculadora de Asados</CardTitle>
           <CardDescription>
-            Accede a tu cuenta o crea una nueva
+            {step === 'code' 
+              ? 'Ingresa tu código de socio para acceder'
+              : `Hola ${memberName}, crea tu cuenta para continuar`
+            }
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Iniciar Sesión</TabsTrigger>
-              <TabsTrigger value="signup">Registrarse</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
-                  <Input
-                    id="signin-email"
-                    name="email"
-                    type="email"
-                    placeholder="tu@email.com"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signin-password">Contraseña</Label>
-                  <Input
-                    id="signin-password"
-                    name="password"
-                    type="password"
-                    placeholder="••••••••"
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
-                </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    name="email"
-                    type="email"
-                    placeholder="tu@email.com"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Contraseña</Label>
-                  <Input
-                    id="signup-password"
-                    name="password"
-                    type="password"
-                    placeholder="••••••••"
-                    minLength={6}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creando cuenta..." : "Crear Cuenta"}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
+          {step === 'code' ? (
+            <form onSubmit={handleCodeVerification} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="access-code">Código de Acceso</Label>
+                <Input
+                  id="access-code"
+                  value={accessCode}
+                  onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+                  placeholder="ASADOR001"
+                  required
+                  className="uppercase"
+                />
+                <p className="text-sm text-muted-foreground">
+                  Usa tu código único de socio (ej: ASADOR001, PARRILLA001)
+                </p>
+              </div>
+              <Button type="submit" className="w-full" disabled={loading || !accessCode}>
+                {loading ? "Verificando..." : "Verificar Código"}
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="tu@email.com"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Contraseña</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  minLength={6}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Creando cuenta..." : "Crear Cuenta"}
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full" 
+                onClick={() => setStep('code')}
+              >
+                Volver
+              </Button>
+            </form>
+          )}
         </CardContent>
       </Card>
     </div>

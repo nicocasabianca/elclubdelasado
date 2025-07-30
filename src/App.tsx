@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -35,15 +35,19 @@ const App = () => (
               </ProtectedRoute>
             } />
             <Route 
-              path="/dashboard" 
+              path="/calculator" 
               element={
                 <ProtectedRoute>
                   <DashboardLayout>
-                    <Dashboard />
+                    <Calculator />
                   </DashboardLayout>
                 </ProtectedRoute>
               } 
             />
+            {/* Redirect dashboard to calculator for MVP */}
+            <Route path="/dashboard" element={<Navigate to="/calculator" replace />} />
+            {/* Hide other routes for MVP - uncomment when needed */}
+            {/* 
             <Route 
               path="/events" 
               element={
@@ -65,16 +69,6 @@ const App = () => (
               } 
             />
             <Route 
-              path="/calculator" 
-              element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <Calculator />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
               path="/members" 
               element={
                 <ProtectedRoute>
@@ -87,6 +81,7 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
+            */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
