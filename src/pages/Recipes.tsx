@@ -24,11 +24,20 @@ const categoryLabels: Record<RecipeCategory, string> = {
 const difficultyLabels = ['', 'Muy Fácil', 'Fácil', 'Intermedio', 'Difícil', 'Muy Difícil'];
 
 export function Recipes() {
-  const { recipes, meatCuts, loading, fetchRecipes } = useRecipes();
+  console.log('📄 Recipes component mounting...');
+  
+  const { recipes, meatCuts, loading, fetchRecipes, error } = useRecipes();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<RecipeCategory | ''>('');
   const [selectedMeatCut, setSelectedMeatCut] = useState('');
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+
+  console.log('📄 Recipes component state:', { 
+    recipesCount: recipes.length, 
+    meatCutsCount: meatCuts.length, 
+    loading, 
+    error 
+  });
 
   const filteredRecipes = recipes.filter(recipe => {
     const matchesSearch = !searchTerm || 
@@ -56,6 +65,17 @@ export function Recipes() {
   };
 
   const hasActiveFilters = searchTerm || selectedCategory || selectedMeatCut;
+
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="text-center py-12">
+          <h2 className="text-xl font-bold text-red-600 mb-2">Error al cargar recetas</h2>
+          <p className="text-muted-foreground">{error}</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>

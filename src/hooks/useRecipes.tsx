@@ -47,6 +47,7 @@ export const useRecipes = () => {
 
   const fetchRecipes = async (filters: RecipeFilters = {}) => {
     try {
+      console.log('🔍 Fetching recipes...', filters);
       setLoading(true);
       let query = supabase.from('recipes').select(`
         *,
@@ -68,9 +69,15 @@ export const useRecipes = () => {
         query = query.overlaps('tags', filters.tags);
       }
 
+      console.log('🔍 Executing query...');
       const { data, error } = await query.order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Database error:', error);
+        throw error;
+      }
+
+      console.log('✅ Recipes data received:', data);
 
       // Transform the data to include meat_cuts as a flat array
       const transformedRecipes = data?.map(recipe => ({
@@ -78,8 +85,10 @@ export const useRecipes = () => {
         meat_cuts: recipe.recipe_meat_cuts?.map((rmc: any) => rmc.meat_cuts.name) || []
       })) || [];
 
+      console.log('✅ Transformed recipes:', transformedRecipes);
       setRecipes(transformedRecipes);
     } catch (err) {
+      console.error('❌ Error in fetchRecipes:', err);
       setError(err instanceof Error ? err.message : 'Error fetching recipes');
     } finally {
       setLoading(false);
@@ -88,16 +97,22 @@ export const useRecipes = () => {
 
   const fetchMeatCuts = async () => {
     try {
+      console.log('🥩 Fetching meat cuts...');
       const { data, error } = await supabase
         .from('meat_cuts')
         .select('*')
         .order('category', { ascending: true })
         .order('name', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Meat cuts error:', error);
+        throw error;
+      }
+      
+      console.log('✅ Meat cuts received:', data);
       setMeatCuts(data || []);
     } catch (err) {
-      console.error('Error fetching meat cuts:', err);
+      console.error('❌ Error fetching meat cuts:', err);
     }
   };
 
@@ -234,6 +249,7 @@ export const useRecipes = () => {
   };
 
   useEffect(() => {
+    console.log('🚀 useRecipes hook initializing...');
     fetchRecipes();
     fetchMeatCuts();
   }, []);
