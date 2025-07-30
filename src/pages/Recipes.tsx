@@ -124,12 +124,12 @@ export function Recipes() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-2">
-              <Select value={selectedCategory} onValueChange={(value) => setSelectedCategory(value as RecipeCategory | '')}>
+              <Select value={selectedCategory || "all"} onValueChange={(value) => setSelectedCategory(value === "all" ? "" : value as RecipeCategory)}>
                 <SelectTrigger className="w-full sm:w-48">
                   <SelectValue placeholder="Tipo de receta" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos los tipos</SelectItem>
+                  <SelectItem value="all">Todos los tipos</SelectItem>
                   {Object.entries(categoryLabels).map(([value, label]) => (
                     <SelectItem key={value} value={value}>
                       {label}
@@ -138,12 +138,12 @@ export function Recipes() {
                 </SelectContent>
               </Select>
 
-              <Select value={selectedMeatCut} onValueChange={setSelectedMeatCut}>
+              <Select value={selectedMeatCut || "all"} onValueChange={(value) => setSelectedMeatCut(value === "all" ? "" : value)}>
                 <SelectTrigger className="w-full sm:w-48">
                   <SelectValue placeholder="Corte de carne" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos los cortes</SelectItem>
+                  <SelectItem value="all">Todos los cortes</SelectItem>
                   {meatCuts.map((cut) => (
                     <SelectItem key={cut.id} value={cut.name}>
                       {cut.name}
