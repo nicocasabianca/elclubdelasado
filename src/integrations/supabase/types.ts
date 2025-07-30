@@ -79,6 +79,63 @@ export type Database = {
         }
         Relationships: []
       }
+      meat_calculations: {
+        Row: {
+          adults: number
+          big_eaters: number
+          children: number
+          created_at: string
+          id: string
+          include_offal: boolean
+          long_event: boolean
+          meat_types: string[]
+          selected_cuts: Json
+          shopping_list: Json
+          title: string
+          total_protein_kg: number
+          total_vegetables_kg: number
+          updated_at: string
+          user_id: string
+          vegetarians: number
+        }
+        Insert: {
+          adults?: number
+          big_eaters?: number
+          children?: number
+          created_at?: string
+          id?: string
+          include_offal?: boolean
+          long_event?: boolean
+          meat_types?: string[]
+          selected_cuts?: Json
+          shopping_list?: Json
+          title: string
+          total_protein_kg?: number
+          total_vegetables_kg?: number
+          updated_at?: string
+          user_id: string
+          vegetarians?: number
+        }
+        Update: {
+          adults?: number
+          big_eaters?: number
+          children?: number
+          created_at?: string
+          id?: string
+          include_offal?: boolean
+          long_event?: boolean
+          meat_types?: string[]
+          selected_cuts?: Json
+          shopping_list?: Json
+          title?: string
+          total_protein_kg?: number
+          total_vegetables_kg?: number
+          updated_at?: string
+          user_id?: string
+          vegetarians?: number
+        }
+        Relationships: []
+      }
       meat_cuts: {
         Row: {
           category: Database["public"]["Enums"]["recipe_category"]
