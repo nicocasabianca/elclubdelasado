@@ -80,24 +80,42 @@ export const useMeatCalculator = () => {
       remaining = totalProtein * 0.9;
     }
 
-    // Apply meat type percentages
-    if (meatTypes.length === 1) {
-      distribution[meatTypes[0]] = remaining;
-    } else if (meatTypes.includes('beef') && meatTypes.includes('pork') && meatTypes.length === 2) {
-      distribution.beef = remaining * 0.7;
-      distribution.pork = remaining * 0.3;
-    } else if (meatTypes.includes('beef') && meatTypes.includes('chicken') && meatTypes.length === 2) {
-      distribution.beef = remaining * 0.8;
-      distribution.chicken = remaining * 0.2;
-    } else if (meatTypes.includes('pork') && meatTypes.includes('chicken') && meatTypes.length === 2) {
-      distribution.pork = remaining * 0.6;
-      distribution.chicken = remaining * 0.4;
-    } else if (meatTypes.length === 3) {
-      // If all three types, distribute evenly for now
-      const each = remaining / 3;
-      distribution.beef = each;
-      distribution.pork = each;
-      distribution.chicken = each;
+    // Handle chorizos first if selected (15% of remaining)
+    let actualRemaining = remaining;
+    if (meatTypes.includes('chorizos')) {
+      distribution.chorizos = remaining * 0.15;
+      actualRemaining = remaining * 0.85;
+    }
+
+    // Get meat types excluding chorizos
+    const mainMeatTypes = meatTypes.filter(type => type !== 'chorizos');
+
+    // Distribute the remaining meat among selected main types
+    if (mainMeatTypes.length === 1) {
+      distribution[mainMeatTypes[0]] = actualRemaining;
+    } else if (mainMeatTypes.length === 2) {
+      if (mainMeatTypes.includes('beef') && mainMeatTypes.includes('pork')) {
+        distribution.beef = actualRemaining * 0.7;
+        distribution.pork = actualRemaining * 0.3;
+      } else if (mainMeatTypes.includes('beef') && mainMeatTypes.includes('chicken')) {
+        distribution.beef = actualRemaining * 0.8;
+        distribution.chicken = actualRemaining * 0.2;
+      } else if (mainMeatTypes.includes('pork') && mainMeatTypes.includes('chicken')) {
+        distribution.pork = actualRemaining * 0.6;
+        distribution.chicken = actualRemaining * 0.4;
+      } else {
+        // Default equal distribution for other combinations
+        const each = actualRemaining / mainMeatTypes.length;
+        mainMeatTypes.forEach(type => {
+          distribution[type] = each;
+        });
+      }
+    } else if (mainMeatTypes.length >= 3) {
+      // Equal distribution for multiple types
+      const each = actualRemaining / mainMeatTypes.length;
+      mainMeatTypes.forEach(type => {
+        distribution[type] = each;
+      });
     }
 
     return distribution;
@@ -146,13 +164,16 @@ export const useMeatCalculator = () => {
         case 'chicken':
           displayName = 'Pollo';
           break;
+        case 'chorizos':
+          displayName = 'Chorizos';
+          break;
         case 'offal':
           displayName = 'Achuras';
           break;
       }
 
       // Add 30% for bone-in cuts (simplified assumption)
-      if (meatType !== 'offal') {
+      if (meatType !== 'offal' && meatType !== 'chorizos') {
         adjustedKg *= 1.3; // 30% bone waste
       }
 
