@@ -60,7 +60,7 @@ const Calculator = () => {
 
       <Tabs defaultValue="calculator" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="calculator">Nueva Calculación</TabsTrigger>
+          <TabsTrigger value="calculator">Nuevo cálculo</TabsTrigger>
           <TabsTrigger value="history" className="flex items-center gap-2">
             <History className="h-4 w-4" />
             Historial

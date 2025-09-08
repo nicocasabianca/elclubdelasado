@@ -92,7 +92,7 @@ export const MeatCalculatorForm = ({ onCalculationComplete }: MeatCalculatorForm
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Calculator className="h-5 w-5" />
-          Nueva Calculación
+          Nuevo cálculo
         </CardTitle>
         <CardDescription>
           Completa los datos del asado para calcular las cantidades necesarias
