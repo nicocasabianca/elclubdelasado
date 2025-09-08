@@ -54,7 +54,7 @@ const Calculator = () => {
           Calculadora para Asados
         </h1>
         <p className="text-muted-foreground">
-          Calcula la cantidad exacta de carne que necesitas para tu asado
+          Calcula la cantidad exacta de insumos que necesitas para tu asado
         </p>
       </div>
 
