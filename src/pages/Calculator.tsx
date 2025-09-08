@@ -51,7 +51,7 @@ const Calculator = () => {
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold flex items-center justify-center gap-2">
           <CalculatorIcon className="h-8 w-8" />
-          Calculadora de Carne para Asados
+          Calculadora para Asados
         </h1>
         <p className="text-muted-foreground">
           Calcula la cantidad exacta de carne que necesitas para tu asado
