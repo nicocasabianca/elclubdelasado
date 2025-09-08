@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 const Auth = () => {
-  const { user, signUp } = useAuth();
+  const { user, signUp, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [accessCode, setAccessCode] = useState("");
@@ -20,8 +20,17 @@ const Auth = () => {
   const [step, setStep] = useState<'code' | 'register'>('code');
 
   // Si ya está autenticado, redirigir al dashboard
-  if (user) {
+  if (user && !authLoading) {
     return <Navigate to="/calculator" replace />;
+  }
+
+  // Show loading while auth is initializing
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   const handleCodeVerification = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -82,15 +91,14 @@ const Auth = () => {
 
       toast.success("¡Cuenta creada exitosamente! Redirigiendo...");
       
-      // Redirect immediately after successful signup
-      setTimeout(() => {
-        navigate('/calculator');
-      }, 1500);
+      // Don't manually redirect - let the auth state change handle it
+      // The Navigate component at the top will handle the redirect automatically
       
     } catch (error) {
       toast.error("Error al crear la cuenta");
-      setLoading(false);
     }
+    
+    setLoading(false);
   };
 
   return (
