@@ -22,9 +22,14 @@ const Index = () => {
               <Button size="lg">Ir a la Calculadora</Button>
             </Link>
           ) : (
-            <Link to="/auth">
-              <Button size="lg">Acceder con Código de Socio</Button>
-            </Link>
+            <div className="flex flex-col gap-3">
+              <Link to="/auth">
+                <Button size="lg" className="w-full">Acceder con Código de Socio</Button>
+              </Link>
+              <Link to="/calculator">
+                <Button size="lg" variant="outline" className="w-full">Probar Calculadora (Demo)</Button>
+              </Link>
+            </div>
           )}
         </div>
       </div>

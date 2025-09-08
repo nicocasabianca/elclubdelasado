@@ -37,11 +37,9 @@ const App = () => (
             <Route 
               path="/calculator" 
               element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <Calculator />
-                  </DashboardLayout>
-                </ProtectedRoute>
+                <DashboardLayout>
+                  <Calculator />
+                </DashboardLayout>
               } 
             />
             {/* Redirect dashboard to calculator for MVP */}
