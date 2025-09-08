@@ -8,69 +8,33 @@ import { MeatCalculatorForm } from '@/components/MeatCalculatorForm';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 const Calculator = () => {
-  const { calculations, loading, fetchCalculations, deleteCalculation } = useMeatCalculator();
+  const {
+    calculations,
+    loading,
+    fetchCalculations,
+    deleteCalculation
+  } = useMeatCalculator();
   const [currentCalculation, setCurrentCalculation] = useState<MeatCalculation | null>(null);
-
   useEffect(() => {
     fetchCalculations();
   }, [fetchCalculations]);
-
   const handleCalculationComplete = (calculation: MeatCalculation) => {
     setCurrentCalculation(calculation);
   };
-
   const handleDeleteCalculation = async (id: string) => {
     await deleteCalculation(id);
   };
-
   const formatMeatTypes = (meatTypes: string[]) => {
     const labels: Record<string, string> = {
       beef: 'Vacuna',
-      pork: 'Cerdo', 
-      chicken: 'Pollo',
-      chorizos: 'Chorizos'
+      pork: 'Cerdo',
+      chicken: 'Pollo'
     };
-    
     return meatTypes.map(type => labels[type] || type).join(', ');
   };
-
-  return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Logo completo arriba del título */}
-      <div className="text-center">
-        <img 
-          src="/lovable-uploads/4d7300b4-4574-47d6-97a3-8ad53855fd16.png" 
-          alt="El Club del Asado" 
-          className="mx-auto h-20 w-auto mb-4"
-        />
-      </div>
-
-      {/* Subtítulo "El Club del Asado" con bandera a la izquierda */}
-      <div className="flex items-center gap-2 mb-4">
-        <div 
-          className="h-6 w-6 bg-cover bg-center bg-no-repeat" 
-          style={{
-            backgroundImage: "url('/lovable-uploads/4d7300b4-4574-47d6-97a3-8ad53855fd16.png')",
-            backgroundPosition: "left center",
-            backgroundSize: "auto 100%"
-          }}
-        />
-        <span className="text-lg font-semibold text-muted-foreground">El Club del Asado</span>
-      </div>
-
+  return <div className="container mx-auto p-6 space-y-6">
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold flex items-center justify-center gap-2">
           <CalculatorIcon className="h-8 w-8" />
@@ -83,7 +47,7 @@ const Calculator = () => {
 
       <Tabs defaultValue="calculator" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="calculator">Nuevo cálculo</TabsTrigger>
+          
           <TabsTrigger value="history" className="flex items-center gap-2">
             <History className="h-4 w-4" />
             Historial
@@ -91,10 +55,9 @@ const Calculator = () => {
         </TabsList>
         
         <TabsContent value="calculator" className="space-y-6">
-          <MeatCalculatorForm onCalculationComplete={handleCalculationComplete} />
           
-          {currentCalculation && (
-            <Card>
+          
+          {currentCalculation && <Card>
               <CardHeader>
                 <CardTitle>Resultado del Cálculo</CardTitle>
                 <CardDescription>
@@ -106,18 +69,10 @@ const Calculator = () => {
                   <div>
                     <h4 className="font-semibold mb-2">Resumen de Participantes</h4>
                     <ul className="space-y-1 text-sm">
-                      {currentCalculation.adults > 0 && (
-                        <li>• {currentCalculation.adults} adultos</li>
-                      )}
-                      {currentCalculation.children > 0 && (
-                        <li>• {currentCalculation.children} niños</li>
-                      )}
-                      {currentCalculation.bigEaters > 0 && (
-                        <li>• {currentCalculation.bigEaters} comedores grandes</li>
-                      )}
-                      {currentCalculation.vegetarians > 0 && (
-                        <li>• {currentCalculation.vegetarians} vegetarianos</li>
-                      )}
+                      {currentCalculation.adults > 0 && <li>• {currentCalculation.adults} adultos</li>}
+                      {currentCalculation.children > 0 && <li>• {currentCalculation.children} niños</li>}
+                      {currentCalculation.bigEaters > 0 && <li>• {currentCalculation.bigEaters} comedores grandes</li>}
+                      {currentCalculation.vegetarians > 0 && <li>• {currentCalculation.vegetarians} vegetarianos</li>}
                     </ul>
                   </div>
                   
@@ -134,30 +89,25 @@ const Calculator = () => {
                 <div>
                   <h4 className="font-semibold mb-2">Lista de Compras</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                    {Object.entries(currentCalculation.shoppingList).map(([item, details]) => (
-                      <Card key={item} className="p-3">
+                    {Object.entries(currentCalculation.shoppingList).map(([item, details]) => <Card key={item} className="p-3">
                         <div className="flex justify-between items-center">
                           <span className="font-medium">{item}</span>
                           <Badge variant="secondary">
                             {details.quantity} {details.unit}
                           </Badge>
                         </div>
-                      </Card>
-                    ))}
+                      </Card>)}
                   </div>
                 </div>
 
                 <div className="pt-4 border-t">
                   <div className="flex gap-2 text-sm text-muted-foreground">
                     <span>Total proteína: {currentCalculation.totalProteinKg.toFixed(1)} kg</span>
-                    {currentCalculation.totalVegetablesKg > 0 && (
-                      <span>• Verduras: {currentCalculation.totalVegetablesKg.toFixed(1)} kg</span>
-                    )}
+                    {currentCalculation.totalVegetablesKg > 0 && <span>• Verduras: {currentCalculation.totalVegetablesKg.toFixed(1)} kg</span>}
                   </div>
                 </div>
               </CardContent>
-            </Card>
-          )}
+            </Card>}
         </TabsContent>
         
         <TabsContent value="history" className="space-y-4">
@@ -168,26 +118,22 @@ const Calculator = () => {
             </p>
           </div>
           
-          {loading ? (
-            <div className="text-center py-8">
+          {loading ? <div className="text-center py-8">
               <p>Cargando historial...</p>
-            </div>
-          ) : calculations.length === 0 ? (
-            <div className="text-center py-8">
+            </div> : calculations.length === 0 ? <div className="text-center py-8">
               <p className="text-muted-foreground">
                 No tienes cálculos guardados aún
               </p>
-            </div>
-          ) : (
-            <div className="grid gap-4">
-              {calculations.map((calc) => (
-                <Card key={calc.id} className="w-full">
+            </div> : <div className="grid gap-4">
+              {calculations.map(calc => <Card key={calc.id} className="w-full">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div>
                         <CardTitle className="text-lg">{calc.title}</CardTitle>
                         <CardDescription>
-                          {calc.createdAt && format(new Date(calc.createdAt), 'PPP', { locale: es })}
+                          {calc.createdAt && format(new Date(calc.createdAt), 'PPP', {
+                      locale: es
+                    })}
                         </CardDescription>
                       </div>
                       <AlertDialog>
@@ -238,31 +184,21 @@ const Calculator = () => {
                         <p className="font-medium mb-1">Totales</p>
                         <div className="space-y-1 text-muted-foreground">
                           <p>{calc.totalProteinKg.toFixed(1)} kg proteína</p>
-                          {calc.totalVegetablesKg > 0 && (
-                            <p>{calc.totalVegetablesKg.toFixed(1)} kg verduras</p>
-                          )}
+                          {calc.totalVegetablesKg > 0 && <p>{calc.totalVegetablesKg.toFixed(1)} kg verduras</p>}
                         </div>
                       </div>
                     </div>
                     
                     <div className="mt-4 pt-4 border-t">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => setCurrentCalculation(calc)}
-                      >
+                      <Button variant="outline" size="sm" onClick={() => setCurrentCalculation(calc)}>
                         Ver Detalles
                       </Button>
                     </div>
                   </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+                </Card>)}
+            </div>}
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>;
 };
-
 export default Calculator;
