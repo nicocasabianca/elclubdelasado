@@ -40,7 +40,8 @@ const Calculator = () => {
     const labels: Record<string, string> = {
       beef: 'Vacuna',
       pork: 'Cerdo', 
-      chicken: 'Pollo'
+      chicken: 'Pollo',
+      chorizos: 'Chorizos'
     };
     
     return meatTypes.map(type => labels[type] || type).join(', ');
@@ -48,8 +49,26 @@ const Calculator = () => {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
+      {/* Logo completo arriba del título */}
+      <div className="text-center">
+        <img 
+          src="/lovable-uploads/4d7300b4-4574-47d6-97a3-8ad53855fd16.png" 
+          alt="El Club del Asado" 
+          className="mx-auto h-20 w-auto mb-4"
+        />
+      </div>
+
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold flex items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold flex items-center justify-center gap-3">
+          {/* Solo la bandera a la izquierda del título */}
+          <div 
+            className="h-8 w-8 bg-cover bg-center bg-no-repeat" 
+            style={{
+              backgroundImage: "url('/lovable-uploads/4d7300b4-4574-47d6-97a3-8ad53855fd16.png')",
+              backgroundPosition: "left center",
+              backgroundSize: "auto 100%"
+            }}
+          />
           <CalculatorIcon className="h-8 w-8" />
           Calculadora para Asados
         </h1>
