@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Auth = () => {
   const { user, signUp } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [accessCode, setAccessCode] = useState("");
   const [email, setEmail] = useState("");
@@ -80,11 +81,16 @@ const Auth = () => {
       }
 
       toast.success("¡Cuenta creada exitosamente! Redirigiendo...");
+      
+      // Redirect immediately after successful signup
+      setTimeout(() => {
+        navigate('/calculator');
+      }, 1500);
+      
     } catch (error) {
       toast.error("Error al crear la cuenta");
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   return (
