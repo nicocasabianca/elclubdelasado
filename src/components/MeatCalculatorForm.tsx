@@ -147,7 +147,7 @@ export const MeatCalculatorForm = ({ onCalculationComplete }: MeatCalculatorForm
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="bigEaters">Comedores grandes (500g)</Label>
+              <Label htmlFor="bigEaters">De buen comer (500g)</Label>
               <Input
                 id="bigEaters"
                 type="number"
