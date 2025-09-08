@@ -129,9 +129,9 @@ export const MeatCalculatorForm = ({
 
         <Separator />
 
-        {/* Tipos de carne */}
+        {/* Tipos de insumos */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Tipos de Carne</h3>
+          <h3 className="text-lg font-semibold">Tipos de insumos</h3>
           <div className="flex flex-wrap gap-3">
             {[{
             value: 'beef',
@@ -145,6 +145,10 @@ export const MeatCalculatorForm = ({
             value: 'chicken',
             label: 'Pollo',
             description: 'Muslos, pechugas, etc.'
+          }, {
+            value: 'chorizos',
+            label: 'Chorizos',
+            description: '15% del total de la carne'
           }].map(meat => <div key={meat.value} className={`border rounded-lg p-3 cursor-pointer transition-colors ${meatTypes.includes(meat.value) ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`} onClick={() => handleMeatTypeToggle(meat.value)}>
                 <div className="flex items-start gap-2">
                   <Checkbox checked={meatTypes.includes(meat.value)} onCheckedChange={() => {}} // Handled by parent div click
