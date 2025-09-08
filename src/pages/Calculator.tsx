@@ -58,17 +58,21 @@ const Calculator = () => {
         />
       </div>
 
+      {/* Subtítulo "El Club del Asado" con bandera a la izquierda */}
+      <div className="flex items-center gap-2 mb-4">
+        <div 
+          className="h-6 w-6 bg-cover bg-center bg-no-repeat" 
+          style={{
+            backgroundImage: "url('/lovable-uploads/4d7300b4-4574-47d6-97a3-8ad53855fd16.png')",
+            backgroundPosition: "left center",
+            backgroundSize: "auto 100%"
+          }}
+        />
+        <span className="text-lg font-semibold text-muted-foreground">El Club del Asado</span>
+      </div>
+
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold flex items-center justify-center gap-3">
-          {/* Solo la bandera a la izquierda del título */}
-          <div 
-            className="h-8 w-8 bg-cover bg-center bg-no-repeat" 
-            style={{
-              backgroundImage: "url('/lovable-uploads/4d7300b4-4574-47d6-97a3-8ad53855fd16.png')",
-              backgroundPosition: "left center",
-              backgroundSize: "auto 100%"
-            }}
-          />
+        <h1 className="text-3xl font-bold flex items-center justify-center gap-2">
           <CalculatorIcon className="h-8 w-8" />
           Calculadora para Asados
         </h1>
